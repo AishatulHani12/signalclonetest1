@@ -7,7 +7,7 @@ import RegisterScreen from './Screens/RegisterScreen';
 
 const Stack = createStackNavigator();
 const globalScreenOptions = {
-  headerStyle: { backgroundColor: "#2C6BED" },
+  headerStyle: { backgroundColor: "#2Cc6BED" },
   headerTitleStyle: { color: "white" },
   headerTintColor: "white",
 }
