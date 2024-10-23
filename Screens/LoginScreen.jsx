@@ -4,21 +4,21 @@ import { Button, Input, Image } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
 import { auth } from '../Firebase';
 
-const LoginScreen = ({navigation}) => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+const LoginScreen = ({ navigation }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    useEffect(() => {
-      const unsubscribe =
-      auth.onAuthStateChanged((authUser) => {
-        console.log(authUser);
-        if (authUser) {
-          navigation.replace("Home");
-        }
-      })
+  useEffect(() => {
+      const unsubscribe = auth.onAuthStateChanged((authUser) => {
+          console.log(authUser);
+          if (authUser) {
+              navigation.replace("Home");
+          }
+      });
+
       return unsubscribe;
-    },[]);
-      
+  }, []);
+
     const signIn = () => {
       auth.signInWithEmailAndPassword(email, password).catch((error) => alert(error));
     };
