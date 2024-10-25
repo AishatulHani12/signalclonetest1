@@ -19,34 +19,22 @@ const CustomListItem = ({ id, chatName, enterChat }) => {
             );
 
         return unsubscribe;
-    }, []);
-
-    useEffect(() => {
-        const unsubscribe = db  
-            .collection("chats")
-            .doc(id)
-            .collection("messages")
-            .orderBy("timestamp", "desc")
-            .onSnapshot((snapshot) =>
-                setChatMessages(snapshot.docs.map(doc => doc.data()))
-            );
-
-        return unsubscribe;
     });
 
     return (
         <ListItem onPress={() => enterChat(id, chatName)} key={id} bottomDivider>
             <Avatar
     rounded
-    source={chatMessages?.[0]?.photoURL ? { uri: chatMessages[0].photoURL } : require('../assets/dp.jpg')}
-    style={{ width: 35, height: 35 }}
+    source={require('../assets/dp.jpg')}
+   
 />
+
             <ListItem.Content>
                 <ListItem.Title style={{ fontWeight: "800" }}>
                     {chatName}
                 </ListItem.Title>
                 <ListItem.Subtitle numberOfLines={1} ellipsizeMode="tail">
-                    ABC
+                    {chatMessages?.[0]?.displayName}: {chatMessages?.[0]?.message}
                    </ListItem.Subtitle>
 
             </ListItem.Content>

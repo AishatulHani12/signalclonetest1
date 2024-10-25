@@ -1,5 +1,5 @@
 import {
-  KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StatusBar,
+  KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, 
   StyleSheet, Text, View, TextInput, Keyboard, TouchableWithoutFeedback,
 } from 'react-native'
 import React, { useLayoutEffect } from 'react'
@@ -8,9 +8,11 @@ import { db, auth } from '../Firebase'
 import { AntDesign, FontAwesome, Ionicons } from '@expo/vector-icons'
 import { TouchableOpacity } from 'react-native'
 import { useState } from 'react'
-import * as firebase from '../Firebase'
+import firebase from "firebase/compat/app";
 import 'firebase/firestore';
-import { FieldValue } from 'firebase/firestore'
+import { StatusBar } from "expo-status-bar";
+
+
 
 
 const ChatScreen = ({ navigation, route }) => {
@@ -30,11 +32,11 @@ const ChatScreen = ({ navigation, route }) => {
             alignItems: "center"
           }}
         >
-           <Avatar
-      rounded
-      source={messages[0]?.data.photoURL ? { uri: messages[0].data.photoURL } : require('../assets/dp.jpg')}
-      style={{ width: 35, height: 35 }}
-    />
+          <Avatar
+            rounded
+            source={ require('../assets/dp.jpg')}
+          
+          />
           <Text style={{ color: "black", marginLeft: 10, fontWeight: "700" }}>
 
             {route.params.chatName}</Text>
@@ -75,7 +77,7 @@ const ChatScreen = ({ navigation, route }) => {
     Keyboard.dismiss();
 
     db.collection('chats').doc(route.params.id).collection('messages').add({
-      timestamp: firebase.firestore.FieldValue.serverTimestamp() ,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       message: input,
       displayName: auth.currentUser.displayName,
       email: auth.currentUser.email,
@@ -115,36 +117,43 @@ const ChatScreen = ({ navigation, route }) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
           <>
-            <ScrollView contentContainerStyle={{ paddingTop:15 }}>
+            <ScrollView contentContainerStyle={{ paddingTop: 15 }}>
               {messages.map(({ id, data }) => (
                 data.email === auth.currentUser.email ? (
-                  <View key={id} style={styles.receiver} >
-                    <Avatar 
-                    rounded
-                    bottom={-15}
-                    right={-5}
-                    size={30}
-            source={require('../assets/dp.jpg')}
-            style={{ width: 30, height: 30 }} />
+
+                  <View key={id} style={styles.reciever} >
+                    <Avatar
+                      rounded
+                      position="absolute"
+                      containerStyle={{
+                        position: "absolute",
+                        bottom: -15,
+                        left: -5
+                      }}
+                      bottom={-15}
+                      right={-5}
+                      size={30}
+                      source={require('../assets/dp.jpg')}
+                      />
                     <Text style={styles.recieverText}> {data.message}</Text>
-                    
+
                   </View>
                 ) : (
 
-                  <View styles={styles.sender}>
-                    <Avatar 
-                    position="absolute"
-                    containerStyle ={{ 
-                      position:"absolute",
-                      bottom:-15,
-                      left: -5
-                     }}
-                     bottom={-15}
-                    left={-5}
-                    rounded
-                    size={30}
-            source={require('../assets/dp.jpg')}
-            style={{ width: 30, height: 30 }}/>
+                  <View key={id} styles={styles.sender}>
+                    <Avatar
+                      position="absolute"
+                      containerStyle={{
+                        position: "absolute",
+                        bottom: -15,
+                        left: -5
+                      }}
+                      bottom={-15}
+                      left={-5}
+                      rounded
+                      size={30}
+                      source={require('../assets/logo.jpeg')}
+                       />
                     <Text style={styles.senderText}> {data.message}</Text>
                     <Text style={styles.senderText}> {data.displayName}</Text>
                   </View>
@@ -162,8 +171,9 @@ const ChatScreen = ({ navigation, route }) => {
                 placeholder="Signal Message"
                 style={styles.textInput}
               />
-              <TouchableOpacity onPress={sendMessage} activeOpacity={0.5}>
-                <Ionicons name="send" size={24} color="#2b68e6" />
+              <TouchableOpacity
+                onPress={sendMessage} activeOpacity={0.5}>
+                <Ionicons name="send" size={24} color="##2B68E6" />
               </TouchableOpacity>
             </View>
           </>
@@ -188,29 +198,29 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     maxWidth: "80%",
     position: "relative",
-},
-recieverText:{
-color: "black",
-fontWeight: "500",
-marginLeft:10,
-},
+  },
+  recieverText: {
+    color: "black",
+    fontWeight: "500",
+    marginLeft: 10,
+  },
 
-sender:{
-  padding: 15,
-  backgroundColor: ("#2B68E6"),
-  alignSelf: "flex-start",
-  borderRadius: 20,
-  marginRight: 15,
-  marginBottom: 20,
-  maxWidth: "80%",
-  position: "relative",
-},
-senderName: {
-  left:10,
-  paddingRight:10,
-  fontSize:10,
-  color: "white",
-},
+  sender: {
+    padding: 15,
+    backgroundColor: ("#2B68E6"),
+    alignSelf: "flex-start",
+    borderRadius: 20,
+    marginRight: 15,
+    marginBottom: 20,
+    maxWidth: "80%",
+    position: "relative",
+  },
+  senderName: {
+    left: 10,
+    paddingRight: 10,
+    fontSize: 10,
+    color: "white",
+  },
   footer: {
     flexDirection: "row",
     alignItems: "center",
@@ -222,11 +232,17 @@ senderName: {
     height: 40,
     flex: 1,
     marginRight: 15,
-    borderColor: "transparent",
     backgroundColor: "#ececec",
-    borderWidth: 1,
     padding: 10,
     color: "grey",
     borderRadius: 30,
+  },
+  displayName: {
+    position: "absolute",
+    bottom: -15,
+    left: 10,
+    paddingRight: 10,
+    fontSize: 10,
+    color: "white",
   },
 })
